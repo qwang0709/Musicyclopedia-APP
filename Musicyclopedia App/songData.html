@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Musicyclopedia</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script type = "text/javascript" src = "search.js"></script>
+    <style>
+
+        /* navbar styling*/
+        .affix{
+            top: 0;
+            width: 100%;
+            z-index: 9999 !important;
+        }
+
+        /* navbar styling*/
+        .affix + .container-fluid{
+            padding-top: 70px;
+        }
+
+        /* navbar styling, main navbar area styling*/
+        .navbar-custom{
+            margin: 0px;
+            background-color: #292929;
+            box-shadow: 0 0 3px black;
+        }
+        
+        /* navbar styling, link styling*/
+        .navbar-custom .navbar-nav > li, .navbar-custom .navbar-nav > li > a{
+            color: #ccc;
+            box-shadow: 0 0 1px black;
+        }
+
+        /* navbar styling, link hover style*/
+        .navbar-custom .navbar-nav > li > a:hover, .navbar-custom .navbar-nav > li > a:focus{
+            color: #ccc;
+            background-color: #1c1c1c;
+        }
+
+        /* navbar styling, active link styling*/
+        .navbar-custom .navbar-nav > li.active > a{
+            background-color: #1c1c1c;
+            color: #ccc;
+        }
+
+        /* main area */
+        .row.equal{
+            display: flex;
+            flex-direction: wrap;
+        }
+
+        /* artist name and picture */
+        .row.equal.a{
+            display: flex;
+            flex-direction: wrap;
+            justify-content: space-between;
+            align-content: center;
+        }
+
+        /* smaller column */
+        .col-md-4.my{
+            order: 1;
+        }
+
+        /* larger column */
+        .col-md-8.me{
+            order: 2;
+        }
+
+        /* popularity box */
+        .col-md-4.well.well-md.a{
+            margin-right: 50px;
+        }
+
+        /* album name and picture */
+        .col-md-4.a{
+            margin-left: 25px;
+        }
+
+        /* the song name */
+        .songLabel{
+            font-size:5vw;
+        }
+
+        /* the name of the artist */
+        .artistLabel{
+            font-size:3vw;
+        }
+
+        /* music video area */
+        .col-md-8.well.well-md.vid{
+            position: relative;
+            padding-bottom: 56.25%;
+            padding-top: 30px;
+            height: 0px;
+            overflow: hidden;
+        }
+
+        /* music video area details */
+        .col-md-8.well.well-md.vid iframe,
+        .col-md-8.well.well-md.vid object,
+        .col-md-8.well.well-md.vid embed{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* exceptions due to smaller screen widths */
+        @media only screen and (max-width: 991px){
+
+            .row.equal{
+                flex-direction: column;
+            }
+
+            .row.equal.a{
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .col-md-4.my{
+                order: 2;
+            }
+
+            .col-md-8.me{
+                order: 1;
+            }
+
+            .col-md-4.well.well-md.a{
+                margin-right: 0px;
+            }
+
+            .col-md-4.a{
+                margin-left: 0px;
+            }
+
+            .songLabel{
+                font-size:7vw;
+            }
+
+            .artistLabel{
+                font-size:5vw;
+            }
+        }
+        @media only screen and (max-width: 768px){
+
+            .songLabel{
+                font-size: 9vw;
+            }
+
+            .artistLabel{
+                font-size: 7vw;
+            }
+        }
+
+    </style>
+</head>
+<body onload="loadSong();" style="background-color:#292929;">
+
+
+<!-- The header of the website -->
+<div class="container-fluid" style="background-color:#008080;color: whitesmoke;padding-left:30px;padding-bottom:10px;">
+    <h1>Musicyclopedia</h1>
+    <h4>The Music Encyclodpedia</h4>
+</div>
+
+
+<!-- The collapsing navigation bar (depending on the size of the browser -->
+<nav class="navbar navbar-inverse navbar-custom" data-spy="affix" data-offset-top="108">
+    <div class="container-fluid">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#instructionArea">Instructions</a></li>
+            <li><a href="index.html#searchArea">Search</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="https://www.spotify.com/us/">Spotify</a></li>
+            <li><a href="https://genius.com/">Genius</a></li>
+            <li><a href="https://www.youtube.com/">Youtube</a></li>
+        </ul>
+    </div>    
+</nav>
+
+<!-- The main section of the code -->
+<div class="container-fluid">
+    <div class="row equal">
+
+        <!-- the smaller column -->
+        <div class="col-md-4 my" id="smaller" style="display:flex;align-items:center;flex-direction:column;background-color:#008080;color:#292929;padding-top:50px;">
+            <!-- search spotify for audio features, and use chartJS to make donut graphs -->
+            
+            <h1>Audio Stats</h1>
+            <h3 id="tempo"></h3>
+            <h3 id="key"></h3>
+            <div class="row" style="width:350px;">
+                <div id="area_1" class="col-md-12">
+                    <!-- chart 1 -->
+                </div>
+            </div>
+            <div class="row" style="width:350px;">
+                <div id="area_2" class="col-md-12">
+                    <!-- chart 2 -->                          
+                </div>
+            </div>
+            <div class="row" style="width:350px;">
+                <div id="area_3" class="col-md-12">
+                    <!-- chart 3 -->                          
+                </div>
+            </div>
+        </div>
+
+        <!-- the larger column -->
+        <div class="col-md-8 me" id="larger" style="background-color:whitesmoke;padding-top:20px;">
+            
+            <!-- song title, artists, and album and album pic -->
+            <div class="row equal a" style="text-align:center;padding-top:30px;margin-left:30px;margin-right:30px;background-color:whitesmoke;">
+                
+                <!-- song name label-->
+                <div class="col-md-4" style="margin-bottom:50px;display:flex;flex-direction:column;justify-content:center;align-content:center;">
+                    <h1 id="songLabel" class="songLabel" style="display:flex;justify-content:center;color:#292929;"></h1>
+                    <h2 id="artistLabel" class="artistLabel" style="display:flex;justify-content:center;color:#292929"></h2>
+                </div>
+
+                <!-- album name and pic -->
+                <div id="col2" class="col-md-4 a" style="margin-bottom:50px;display:flex;justify-content:center;align-content:center;flex-direction:column;">
+                </div>
+            </div>
+
+            <!-- popularity and song player -->
+            <div class="row equal a" style="margin-left:30px;margin-right:30px;margin-top:50px;">
+
+                <!-- popularity -->
+                <div class="col-md-4 well well-md a" style="background-color:#292929;color:#ccc;">
+                    <h2 id="popularity"></h2>
+                    <h2 id="duration"></h2>
+                </div>
+
+                <!-- song player -->
+                <div class="col-md-8 well well-md" style="display:flex;justify-content:center;align-items:center;background-color:#292929;color:#ccc;">
+                    <iframe id="songPlayer"></iframe>
+                </div>
+            </div>
+
+            <!-- music video -->
+            <div class="row" style="margin-top:100px;background-color: #292929;">
+                <div class="container-fluid">
+                    <div class="col-md-12 well well-md vid" style="display:flex;justify-content:center;align-items:center;border-color:#292929;background-color:#292929;color:#ccc;">
+                        <iframe id="vid" width="853" height="480" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>    
+</html>

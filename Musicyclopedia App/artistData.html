@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Musicyclopedia</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type = "text/javascript" src = "search.js"></script>
+    <style>
+
+        /* navbar styling*/
+        .affix{
+            top: 0;
+            width: 100%;
+            z-index: 9999 !important;
+        }
+
+        /* navbar styling*/
+        .affix + .container-fluid{
+            padding-top: 70px;
+        }
+
+        /* navbar styling, main navbar area styling*/
+        .navbar-custom{
+            margin: 0px;
+            background-color: #292929;
+            box-shadow: 0 0 3px black;
+        }
+        
+        /* navbar styling, link styling*/
+        .navbar-custom .navbar-nav > li, .navbar-custom .navbar-nav > li > a{
+            color: #ccc;
+            box-shadow: 0 0 1px black;
+        }
+
+        /* navbar styling, link hover style*/
+        .navbar-custom .navbar-nav > li > a:hover, .navbar-custom .navbar-nav > li > a:focus{
+            color: #ccc;
+            background-color: #1c1c1c;
+        }
+
+        /* navbar styling, active link styling*/
+        .navbar-custom .navbar-nav > li.active > a{
+            background-color: #1c1c1c;
+            color: #ccc;
+        }
+
+        /* main area */
+        .row.equal{
+            display: flex;
+            flex-direction: wrap;
+        }
+
+        /* artist name and picture */
+        .row.equal.a{
+            display: flex;
+            flex-direction: wrap;
+            justify-content: space-around;
+        }
+
+        /* smaller column */
+        .col-md-4.my{
+            order: 1;
+        }
+
+        /* larger column */
+        .col-md-8.me{
+            order: 2;
+        }
+
+        /* the label for the artists name */
+        .artistLabel{
+            font-size:5vw;
+        }
+
+        /* exceptions due to smaller screen widths */
+        @media only screen and (max-width: 991px){
+
+            .row.equal{
+                flex-direction: column;
+            }
+
+            .row.equal.a{
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .col-md-4.my{
+                padding-bottom:50px;
+            }
+
+            .artistLabel{
+                font-size:7vw;
+            }
+        }
+        @media only screen and (max-width: 768px){
+
+            .artistLabel{
+                font-size: 9vw;
+            }
+        }
+
+    </style>
+</head>
+<body onload="loadArtist();" id="page" style="background-color:#292929;">
+
+
+<!-- The header of the website -->
+<div class="container-fluid" style="background-color:#008080;color: whitesmoke;padding-left:30px;padding-bottom:10px;">
+    <h1>Musicyclopedia</h1>
+    <h4>The Music Encyclodpedia</h4>
+</div>
+
+
+<!-- The collapsing navigation bar (depending on the size of the browser -->
+<nav class="navbar navbar-inverse navbar-custom" data-spy="affix" data-offset-top="108">
+    <div class="container-fluid">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#instructionArea">Instructions</a></li>
+            <li><a href="index.html#searchArea">Search</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="https://www.spotify.com/us/">Spotify</a></li>
+            <li><a href="https://genius.com/">Genius</a></li>
+            <li><a href="https://www.youtube.com/">Youtube</a></li>
+        </ul>
+    </div>    
+</nav>
+
+<!-- The main section of the code -->
+<div class="container-fluid">
+    <div class="row equal">
+
+        <!-- the smaller column -->
+        <div class="col-md-4 my" id="smaller" style="display:flex;align-items:center;flex-direction:column;background-color:#008080;color:#292929;padding-top:50px;">
+            <h2 id="smallInstruction">Click on an album to show its songs</h2>
+        </div>
+
+        <!-- the larger column -->
+        <div class="col-md-8 me" id="larger" style="background-color:whitesmoke;padding-top:50px;">
+
+            <!-- artist name and picture-->
+            <div class="row equal a" style="margin-left:30px;margin-right:30px;background-color:whitesmoke;">
+                
+                <!-- artist name label-->
+                <div class="col-md-4">
+                    <h1 id="artistLabel" class="artistLabel" style="display:flex;justify-content:center;margin-bottom:75px;color: #292929;"></h1>
+                </div>
+
+                <!-- artist picture -->
+                <div class="col-md-4">
+                    <div id="nameArea" style="display:flex;justify-content:center;background-color:whitesmoke;">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- the top row, artist picture, tags, popularity-->
+            <div class="row equal a" style="margin-left:30px;margin-right:30px;margin-top:50px;">
+
+                <!-- genre tags -->
+                <div class="col-md-4 well well-md" style="background-color: #292929;color:#ccc;">
+                    <h2>Tags</h2>
+                    <h3 id="artistTags"></h2>
+                </div>
+
+                <!-- artist popularity area -->
+                <div class="col-md-4 well well-md" style="background-color:#292929;color:#ccc;">
+                    <h2 id="popularity"></h2>
+                    <h2 id="followers"></h2>
+                </div>
+            </div>
+
+            <!-- carousel and top song area -->
+            <div class="row equal well well-lg" style="background-color:#292929;margin-left:30px;margin-right:30px;margin-top:50px;">
+                        
+                    <!-- album carousel -->
+                    <div class="col-md-6" style="display:flex;justify-content:center;align-content:center;background-color:#292929;">
+                            <div id="carousel" class="carousel slide" data-ride="carousel">
+                            
+                                <!-- indicators, the dots showing how many slides there are -->
+                                <ol id="myOD" class="carousel-indicators hidden">
+                                    <!-- add <li data-target="#carousel" data-slide-to="(the index) class="active"<-if the first one ></li>"-->
+                                </ol>
+        
+                                <!-- wrapper for slides -->
+                                <div id="myIN" class="carousel-inner">
+                                    <!-- add <div class="item active(if the first one)"> add image here </div> -->
+                                </div>
+        
+                                <!-- left and right controls -->
+                                <a class="left carousel-control" href="#carousel"  data-slide="prev">
+                                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="right carousel-control" href="#carousel" data-slide="next">
+                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                    </div>
+    
+                    <!-- top song area -->
+                    <div id="topSongArea" class="col-md-6" style="background-color: #292929;color:#ccc;">
+                    </div>
+            </div>
+            
+            <!-- Description area -->
+            <div id="descriptionArea" class="container-fluid" style="background-color:whitesmoke;color:#ccc;padding-left:30px;padding-right:30px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>    
+</html>
